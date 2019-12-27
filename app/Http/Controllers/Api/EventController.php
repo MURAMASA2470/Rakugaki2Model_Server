@@ -11,6 +11,10 @@ class EventController extends Controller
 {
 
     protected $event;
+    protected $localPath = '/Users/muramasa/ws/Misoten/';
+    protected $mainProjectName = 'Rakugaki2Model_MainProcess';
+    protected $clientProjectName = 'Rakugaki2Model_Client';
+    protected $serverProjectName = 'Rakugaki2Model_Server';
 
     public function __construct(Event $event) {
         $this->event = $event;
@@ -27,23 +31,28 @@ class EventController extends Controller
         $event->obj = $obj;
 
         $event->save();
-
-        $path = '/Users/muramasa/ws/Misoten/Rakugaki2Model_MainProcess/';
     }
 
-    public function generate(/*path*/) {
+    public function generate(Request $req) {
 
         $res = []; $ret = '';
-        $path = '/Users/muramasa/ws/Misoten/Rakugaki2Model_MainProcess/';
+        $targetPath = $this->localPath . $this->mainProjectName;
+        if($base64 = $req->base64) {
+            $base64bin = str_replace('data:image/png;base64,', '', $base64);
+            $base64bin = str_replace(' ', '+', $base64bin);
+            $image = base64_decode($base64bin);
+            exec("rm -rf {$targetPath}/test_image/*");
+            // \File::put("{$targetPath}/test_image/aaa.jpg", $image);
+            file_put_contents("{$targetPath}/test_image/aaa.jpg", $image);
 
-        // exec("rm -rf {$path}test_image/*");
-
-        $execFile = 'demo.py';
-        // $output = 'output/models/' . 'komura' . '.obj';
-        $output = '../Rakugaki2Model_Client/' . 'komura' . '.obj';
-        $cmd = "cd {$path} && python {$execFile} {$output} >& /dev/null";
-        passthru($cmd, $res);
-        return $res;
+            $execFile = 'demo.py';
+            $output = 'output/models/' . 'komura' . '.obj';
+            $output = $this->localPath . $clientProjectName . $output;
+            $cmd = "cd {$targetPath} && python {$execFile} {$output} >& /dev/null";
+            exec($cmd, $res);
+            return $res;
+        }
+        return abort(400);
     }
 
 }

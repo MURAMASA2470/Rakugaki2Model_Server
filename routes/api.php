@@ -15,4 +15,4 @@ use Illuminate\Http\Request;
 
 Route::get('/', 'Api\EventController@index')->name('index');
 Route::get('/add/{obj}/{img}', 'Api\EventController@add')->name('add');
-Route::get('/generate', 'Api\EventController@generate')->name('generate');
+Route::post('/generate', 'Api\EventController@generate')->name('generate');
