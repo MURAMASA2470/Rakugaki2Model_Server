@@ -46,8 +46,8 @@ class EventController extends Controller
             file_put_contents("{$targetPath}/test_image/aaa.jpg", $image);
 
             $execFile = 'demo.py';
-            $output = 'output/models/' . 'komura' . '.obj';
-            $output = $this->localPath . $clientProjectName . $output;
+            $output = '/output/models/' . 'test' . '.obj';
+            $output = $this->localPath . $this->clientProjectName . $output;
             $cmd = "cd {$targetPath} && python {$execFile} {$output} >& /dev/null";
             exec($cmd, $res);
             return $res;
