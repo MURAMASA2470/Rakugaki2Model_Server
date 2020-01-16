@@ -48,10 +48,10 @@ class EventController extends Controller
             file_put_contents("{$targetPath}/test_image/model.jpg", $image);
 
             // Client側にpix2pixで生成した画像ファイルを保存する
-            file_put_contents("{$this->localPath}{$this->clientProjectName}/output/images/{$req->file}.jpg", $image);
+            file_put_contents("{$this->localPath}{$this->clientProjectName}/static/output/images/{$req->file}.jpg", $image);
             // 3Dモデルの生成及びClient側への保存
             $execFile = 'demo.py';
-            $output = "/output/models/{$req->file}.obj";
+            $output = "/static/output/models/{$req->file}.obj";
             $output = $this->localPath . $this->clientProjectName . $output;
             $cmd = "cd {$targetPath} && python {$execFile} {$output} >& /dev/null";
             exec($cmd, $res);
